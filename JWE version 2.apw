@@ -154,8 +154,12 @@
 <FilePathName>Master, RS March 6 Melbourne.axs</FilePathName>
 <Comments></Comments>
 </File>
-<File CompileType="Netlinx" Type="MasterSrc"><Identifier>Master, RS ver 2 Melbourne</Identifier>
+<File CompileType="Netlinx" Type="Source"><Identifier>Master, RS ver 2 Melbourne</Identifier>
 <FilePathName>Master, RS ver 2 Melbourne.axs</FilePathName>
+<Comments></Comments>
+</File>
+<File CompileType="Netlinx" Type="MasterSrc"><Identifier>Master, RS ver 2.5 Melbourne</Identifier>
+<FilePathName>Master, RS ver 2.5 Melbourne.axs</FilePathName>
 <Comments></Comments>
 </File>
 <File CompileType="Netlinx" Type="DUET"><Identifier>JBMIA_PJLink_Comm_dr1_0_0</Identifier>

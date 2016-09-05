@@ -168,6 +168,7 @@ integer rexroom = 0//Checks if the rex room was actually run
 integer systemmute = 0 //system mute status
 integer emergency = 0 //system emergency status
 Dev Panels[] = {dvtp, dvtpvirtual}
+integer showlighting
 (***********************************************************)
 (*               LATCHING DEFINITIONS GO BELOW             *)
 (***********************************************************)
@@ -464,7 +465,6 @@ Define_function EOD()//End of day function
 {
     [vdvrexproj,255] = 0//Rex projector off
     Send_string dvconproj,"Christieoff"
-    Send_string dvlighting,"'RAQL',$0A"//Releases all lighting cues
     Send_string dvMonDino1,"samsungoff"
     Send_string dvMonDino2,"samsungoff"
     wait(10)
@@ -492,7 +492,6 @@ Define_function EOD()//End of day function
 		    Send_string dvMonBuild3,"lgpoff"
 		    Wait(10)
 		    {
-			Send_string dvlighting, "'GTQ 12,1',$0A"//lamp off cue
 			Send_string dvMoncard1,"samsungoff"
 			Send_string dvMoncard2,"samsungoff"
 			Send_string dvMoncard3,"samsungoff"
@@ -756,7 +755,7 @@ data_event[dvtpvirtual]//virtual touchscreen
 		emergency = 0//emergency variable off
 	    }
 	}
-	if(systemmute = 0)//system mute turn on event
+	(*if(systemmute = 0)//system mute turn on event //commented out to remove password
 	{
 	    if(data.text == 'KEYP-3003')//checks password
 	    {
@@ -765,7 +764,7 @@ data_event[dvtpvirtual]//virtual touchscreen
 		systemmute = 1
 		[panels,801] = 1//Mute button on
 	    }
-	}
+	}*)
     }
 }
 Data_event[vdvjwe]//Virtual device is used to trigger and pass data between masters
@@ -959,7 +958,23 @@ button_event[panels,801]//audio mute button
     }
     hold[30]://hold for 3 seconds
     {
-	SEND_COMMAND dvtp, "'@PPN-_keypad'"//Opens keypad to enter mute password
+	//passcode commented out on 9/5/2016 but kept in code to re-add if needed
+	//SEND_COMMAND dvtp, "'@PPN-_keypad'"//Opens keypad to enter mute password
+	Send_string dvqsys1,"'csp Mutesys 1',$0A"//sets system mute
+	Send_string dvqsys2,"'csp Mutesys 1',$0A"
+	systemmute = 1
+	[panels,801] = 1//Mute button on
+    }
+}
+button_event[panels,802]//Lighting off
+{
+    push:
+    {
+	Send_string dvlighting,"'RAQL',$0A"//Releases all lighting cues
+	wait(10)
+	{
+	    Send_string dvlighting, "'GTQ 12,1',$0A"//lamp off cue
+	}
     }
 }
 Button_event[dvrexbutton,start]//Start theater
