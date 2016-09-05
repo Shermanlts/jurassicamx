@@ -351,7 +351,6 @@ Define_function SOD()//Start of day function
     {
 	Emailtest()
     }
-    Send_string dvlighting,"'GTQ 11,1',$0A"//lamp strike cue for lighting
     [vdvrexproj,255] = 1//turn on rex projector
     Send_string dvMonDino1,"samsungon"
     Wait(10)
@@ -383,7 +382,6 @@ Define_function SOD()//Start of day function
 			Wait(10)
 			{
 			    //Send_string dvMoncard4,"samsungon"
-			    Send_string dvlighting,"'GTQ 9,1',$0A"
 			    Send_string dvbrtpet,"'play'"
 			    Send_string dvbrtwu,"'play'"
 			    Send_string dvbrtinn,"'play'"
@@ -391,34 +389,18 @@ Define_function SOD()//Start of day function
 			    {
 				Send_string dvMonBuild1,"lgpon"
 				Send_string dvmonbuild1,"lgpon"
-				Send_string dvlighting,"'GTQ 1,1',$0A"
 				wait(10)
 				{
-				    Send_string dvlighting,"'GTQ 2,1',$0A"
-				    Send_string dvlighting,"'GTQ 3,1',$0A"
 				    Send_string dvMonBuild2,"lgpon"
 				    Wait(10)
 				    {
-					Send_string dvlighting,"'GTQ 4,1',$0A"
-					Send_string dvlighting,"'GTQ 5,1',$0A"
-					Send_string dvlighting,"'GTQ 6,1',$0A"
-					Wait(10)
+					Send_string dvMonBuild3,"lgpon"
+					Send_string dvMonBuild4,"lgpon"
+					wait(10)
 					{
-					    Send_string dvMonBuild3,"lgpon"
-					    Send_string dvMonBuild4,"lgpon"
-					    wait(10)
-					    {
-						Send_string dvlighting,"'GTQ 7,1',$0A"
-						Send_string dvlighting,"'GTQ 10,1',$0A"
-						Wait(10)
-						{
-						    Send_string dvlighting,"'GTQ 19,1',$0A"
-						    Send_string dvconproj,"Christieon"
-						    Send_string dvmonbuild1,"lgpon"
-						}
-					    }
+					    Send_string dvconproj,"Christieon"
+					    Send_string dvmonbuild1,"lgpon"
 					}
-					
 				    }
 				}
 			    }
@@ -974,6 +956,103 @@ button_event[panels,802]//Lighting off
 	wait(10)
 	{
 	    Send_string dvlighting, "'GTQ 12,1',$0A"//lamp off cue
+	    showlighting = 0
+	}
+    }
+}
+button_event[panels,803]//Lighting test mode
+{
+    push:
+    {
+	if(showlighting == 0)
+	{
+	    Send_string dvlighting,"'GTQ 11,1',$0A"//lamp strike cue for lighting
+	    wait(40)
+	    {
+		SEND_STRING dvlighting, "'GTQ 8,1',$0A"//Lighting test cue
+		showlighting = 1
+	    }
+	}
+	Else
+	{
+	    send_string dvlighting, "'RAQL',$0A"//Releases all lighting cues
+	    wait(20)
+	    {
+		SEND_STRING dvlighting, "'GTQ 8,1',$0A"//Lighting test cue
+		showlighting = 1
+	    }
+	}
+    }
+}
+button_event[panels,804]//Lighting on
+{
+    push:
+    {
+	if(showlighting == 0)
+	{
+	    Send_string dvlighting,"'GTQ 11,1',$0A"//lamp strike cue for lighting
+	    wait(40)
+	    {
+		Send_string dvlighting,"'GTQ 9,1',$0A"
+		wait(20)
+		{
+		    Send_string dvlighting,"'GTQ 1,1',$0A"
+		    wait(10)
+		    {
+			Send_string dvlighting,"'GTQ 2,1',$0A"
+			Send_string dvlighting,"'GTQ 3,1',$0A"
+			Wait(10)
+			{
+			    Send_string dvlighting,"'GTQ 4,1',$0A"
+			    Send_string dvlighting,"'GTQ 5,1',$0A"
+			    Send_string dvlighting,"'GTQ 6,1',$0A"
+			    wait(10)
+			    {
+				Send_string dvlighting,"'GTQ 7,1',$0A"
+				Send_string dvlighting,"'GTQ 10,1',$0A"
+				Wait(10)
+				{
+				    Send_string dvlighting,"'GTQ 19,1',$0A"
+				    showlighting = 2
+				}
+			    }
+			}
+		    }
+		}
+	    }
+	}
+	ELSE
+	{
+	    send_string dvlighting, "'RAQL',$0A"//Releases all lighting cues
+	    wait(40)
+	    {
+		Send_string dvlighting,"'GTQ 9,1',$0A"
+		wait(20)
+		{
+		    Send_string dvlighting,"'GTQ 1,1',$0A"
+		    wait(10)
+		    {
+			Send_string dvlighting,"'GTQ 2,1',$0A"
+			Send_string dvlighting,"'GTQ 3,1',$0A"
+			Wait(10)
+			{
+			    Send_string dvlighting,"'GTQ 4,1',$0A"
+			    Send_string dvlighting,"'GTQ 5,1',$0A"
+			    Send_string dvlighting,"'GTQ 6,1',$0A"
+			    wait(10)
+			    {
+				Send_string dvlighting,"'GTQ 7,1',$0A"
+				Send_string dvlighting,"'GTQ 10,1',$0A"
+				Wait(10)
+				{
+				    Send_string dvlighting,"'GTQ 19,1',$0A"
+				    showlighting = 2
+				}
+			    }
+			}
+		    }
+		}
+	    }
 	}
     }
 }
@@ -1207,7 +1286,9 @@ Timeline_event[TL_timers]//used to count system time
 (*****************************************************************)
 
 DEFINE_PROGRAM
-
+[panels,802] = (showlighting == 0)
+[panels,803] = (showlighting == 1)
+[panels,804] = (showlighting == 2)
 (*****************************************************************)
 (*                       END OF PROGRAM                          *)
 (*                                                               *)
